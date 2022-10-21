@@ -28,4 +28,27 @@ def handle_planets():
         })
     return jsonify(planets_response)
 
+@planets_bp.route("/<planet_id>", methods=["GET"])
+def get_one_planet(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except ValueError: 
+        return jsonify({"message":f"Invalid data type {planet_id}"}), 400
+
+    chosen_planet = None
+    for planet in planet_list:
+        if planet.id == planet_id:
+            chosen_planet = planet
+            return chosen_planet
+    if chosen_planet is None:
+        return jsonify({"message":f"Could not find planet with id {planet_id}"}), 404
+
+
+
+
+
+
+
+
+
 #please save this :)  I did it but just to make sure.
