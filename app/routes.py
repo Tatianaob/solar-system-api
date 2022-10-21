@@ -34,15 +34,23 @@ def get_one_planet(planet_id):
         planet_id = int(planet_id)
     except ValueError: 
         return jsonify({"message":f"Invalid data type {planet_id}"}), 400
-
+    
     chosen_planet = None
     for planet in planet_list:
         if planet.id == planet_id:
             chosen_planet = planet
-            return chosen_planet
+        
     if chosen_planet is None:
         return jsonify({"message":f"Could not find planet with id {planet_id}"}), 404
 
+    return_planets = {
+        "id": chosen_planet.id,
+        "name": chosen_planet.name,
+        "description": chosen_planet.description,
+        "number of moons": chosen_planet.number_of_moons
+    }
+
+    return jsonify(return_planets), 200
 
 
 
@@ -51,4 +59,3 @@ def get_one_planet(planet_id):
 
 
 
-#please save this :)  I did it but just to make sure.
