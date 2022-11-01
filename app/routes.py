@@ -19,17 +19,20 @@ from app.models.planet import Planet
 
 planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 
+
+
 @planets_bp.route("", methods=["GET"])
-def read_all_planets():
+def read_all_planets():  
+    
+    moons_query_value = request.args.get("number_of_moons")
+
+    if moons_query_value is not None:
+        planets = Planet.query.filter_by(number_of_moons=moons_query_value)
+    else:
+        planets = Planet.query.all()
+
     planets_response = []
-    all_planets = Planet.query.all()
-    for planet in all_planets:
-        # planets_response.append({
-        #     "id": planet.id,
-        #     "name": planet.name,
-        #     "description": planet.description,
-        #     "number of moons": planet.number_of_moons
-        # })
+    for planet in planets:
         planets_response.append(planet.to_dict())
     return jsonify(planets_response), 200
 
@@ -79,10 +82,10 @@ def get_planet_from_id(planet_id):
     try:
         planet_id = int(planet_id)
     except ValueError:
-        return abort(make_response({"msg": f"Invalid data type: {planet_id}"}), 400)
+        return abort(make_response({"msg": f"Invalid data type: {planet_id}"}, 400))
     chosen_planet = Planet.query.get(planet_id)
     if chosen_planet is None:
-        return abort(make_response({"msg": f"Could not find planet with id: {planet_id}"}), 404)
+        return abort(make_response({"msg": f"Could not find planet with id: {planet_id}"}, 404))
     return chosen_planet
 
 
