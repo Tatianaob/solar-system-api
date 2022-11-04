@@ -44,7 +44,8 @@ def get_one_planet(planet_id):
 @planets_bp.route("", methods=["POST"])
 def create_one_planet():
     request_body = request.get_json()
-    new_planet = Planet(name=request_body["name"], description=request_body["description"], number_of_moons=request_body["number_of_moons"])
+    # new_planet = Planet(name=request_body["name"], description=request_body["description"], number_of_moons=request_body["number_of_moons"])
+    new_planet = Planet.from_dict(request_body)
     db.session.add(new_planet)
     db.session.commit()
     return jsonify({"msg": f"Successfully created planet with id={new_planet.id}"}), 201
